@@ -13,7 +13,9 @@ import Recipes from "../components/Recipes";
 const HomeScreen = () => {
   const [activeCategory, setActiveCategory] = useState("");
   const [categories, setCategories] = useState([]);
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState<
+    { strMeal: string; strMealThumb: string; idMeal: string }[]
+  >([]);
 
   useEffect(() => {
     getCategories();
@@ -42,7 +44,14 @@ const HomeScreen = () => {
       const response = await axios.get(
         `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
       );
-      if (response && response.data) setRecipes(response.data.meals);
+      if (response && response.data && Array.isArray(response.data.meals)) {
+        const meals: {
+          strMeal: string;
+          strMealThumb: string;
+          idMeal: string;
+        }[] = response.data.meals;
+        setRecipes(meals);
+      }
     } catch (error) {
       console.log("Error fetching categories", error);
     }
@@ -125,7 +134,7 @@ const HomeScreen = () => {
 
         {/**Recipes  */}
         <View>
-          <Recipes recipes={recipes} categories={categories} />
+          {recipes && <Recipes recipes={recipes} categories={categories} />}
         </View>
       </ScrollView>
     </View>

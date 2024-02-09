@@ -4,7 +4,6 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import MasonryList from "@react-native-seoul/masonry-list";
-import { categoryData } from "../constants";
 import RecipeProps from "../interface/recipeProps";
 import RecipeCard from "../widgets/RecipeCard";
 
@@ -22,11 +21,20 @@ const Recipes: React.FC<RecipeProps> = ({ categories, recipes }) => {
         {categories.length > 0 && recipes.length > 0 && (
           <MasonryList
             data={recipes}
-            keyExtractor={(item): string => item.id}
+            keyExtractor={(item): string => item.idMeal}
             numColumns={2}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, i }) => (
-              <RecipeCard recipes={item} index={0} />
+              <RecipeCard
+                recipe={
+                  item as {
+                    strMeal: string;
+                    strMealThumb: string;
+                    idMeal: string;
+                  }
+                }
+                index={i}
+              />
             )}
             // refreshing={isLoadingNext}
             // onRefresh={() => refetch({ first: ITEM_CNT })}

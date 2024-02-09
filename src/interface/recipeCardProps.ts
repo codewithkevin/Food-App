@@ -1,8 +1,8 @@
 export default interface RecipeCardProps {
-  recipes: {
+  recipe: {
     strMeal: string;
     strMealThumb: string;
     idMeal: string;
-  }[];
+  };
   index: number;
 }

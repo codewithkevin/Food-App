@@ -1,3 +1,4 @@
+// RecipeProps interface
 export default interface RecipeProps {
   categories: {
     idCategory: string;

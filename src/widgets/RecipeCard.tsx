@@ -1,34 +1,26 @@
 import React from "react";
 import { View, Text, Pressable, Image } from "react-native";
-import RecipeCardProps from "../interface/recipeCardProps";
+import RecipeCardProps from "../interface/recipeCardProps"; // Ensure this interface reflects the correct structure
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
-const RecipeCard = ({ recipes, index }) => {
-  let isEven = index % 2 === 0;
-  const recipe = recipes[index];
-
-  if (!recipe) return null;
-
+// Adjust RecipeCardProps to expect a single recipe object, not an array
+const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   return (
-    <Animated.View
-      entering={FadeInDown.delay(index * 1000)
-        .springify()
-        .damping(20)}
-    >
+    <Animated.View entering={FadeInDown.delay(100).springify().damping(20)}>
       <Pressable
         style={{
           width: "100%",
-          paddingLeft: isEven ? 0 : 8,
-          paddingRight: isEven ? 8 : 0,
+          marginBottom: hp(3),
+          paddingHorizontal: hp(0.5),
         }}
-        className="flex justify-center mb-4 space-y-2"
+        className="flex justify-center space-y-1"
       >
         <Image
           source={{ uri: recipe.strMealThumb }}
           style={{
             width: "100%",
-            height: index % 3 === 0 ? hp(25) : hp(35),
+            height: hp(25),
             borderRadius: hp(3.2),
           }}
         />
