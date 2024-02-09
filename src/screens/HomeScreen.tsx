@@ -8,14 +8,20 @@ import {
 import Categories from "../components/Categories";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Recipes from "../components/Recipes";
 
 const HomeScreen = () => {
   const [activeCategory, setActiveCategory] = useState("");
   const [categories, setCategories] = useState([]);
+  const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
     getCategories();
   }, []);
+
+  useEffect(() => {
+    getRecipes();
+  }, [activeCategory]);
 
   const getCategories = async () => {
     try {
@@ -26,6 +32,17 @@ const HomeScreen = () => {
         setCategories(response.data.categories);
         setActiveCategory(response.data.categories[0].strCategory);
       }
+    } catch (error) {
+      console.log("Error fetching categories", error);
+    }
+  };
+
+  const getRecipes = async (category = activeCategory) => {
+    try {
+      const response = await axios.get(
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
+      );
+      if (response && response.data) setRecipes(response.data.meals);
     } catch (error) {
       console.log("Error fetching categories", error);
     }
@@ -107,7 +124,9 @@ const HomeScreen = () => {
         </View>
 
         {/**Recipes  */}
-        <View></View>
+        <View>
+          <Recipes recipes={recipes} categories={categories} />
+        </View>
       </ScrollView>
     </View>
   );
