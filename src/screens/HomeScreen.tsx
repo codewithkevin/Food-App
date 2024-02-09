@@ -6,10 +6,30 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Categories from "../components/Categories";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const HomeScreen = () => {
-  const [activeCategory, setActiveCategory] = useState("BreakFast");
+  const [activeCategory, setActiveCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(
+        "https://www.themealdb.com/api/json/v1/1/categories.php"
+      );
+      if (response && response.data) {
+        setCategories(response.data.categories);
+        setActiveCategory(response.data.categories[0].strCategory);
+      }
+    } catch (error) {
+      console.log("Error fetching categories", error);
+    }
+  };
 
   return (
     <View className="flex-1 bg-white">
@@ -76,11 +96,18 @@ const HomeScreen = () => {
         {/**categories  */}
 
         <View>
-          <Categories
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
-          />
+          {categories.length > 0 && (
+            <Categories
+              categories={categories}
+              setCategories={setCategories}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+            />
+          )}
         </View>
+
+        {/**Recipes  */}
+        <View></View>
       </ScrollView>
     </View>
   );

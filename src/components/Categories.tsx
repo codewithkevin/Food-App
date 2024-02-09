@@ -4,10 +4,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import CategoriesProps from "../interface/categoryProps";
-import Animated, { FadeInDown, FadeOut } from "react-native-reanimated";
 
 const Categories: React.FC<CategoriesProps> = ({
+  categories,
   activeCategory,
   setActiveCategory,
 }) => {
@@ -19,19 +20,21 @@ const Categories: React.FC<CategoriesProps> = ({
         className="space-x-4"
         contentContainerStyle={{ paddingHorizontal: 15 }}
       >
-        {categoryData.map((category, index) => {
-          let isActive = category.name === activeCategory;
+        {categories.map((category, index) => {
+          let isActive = category.strCategory === activeCategory;
           let activeButtonClass =
-            category.name === activeCategory ? "bg-amber-400" : "bg-white";
+            category.strCategory === activeCategory
+              ? "bg-amber-400"
+              : "bg-white";
           return (
             <TouchableOpacity
-              onPress={() => setActiveCategory(category.name)}
+              onPress={() => setActiveCategory(category.strCategory)}
               key={index}
               className="flex-1 space-y-2 items-center"
             >
               <View className={"rounded-full p-[6px] " + activeButtonClass}>
                 <Image
-                  source={{ uri: category.image }}
+                  source={{ uri: category.strCategoryThumb }}
                   className="rounded-full"
                   style={{
                     width: hp(6),
@@ -45,7 +48,7 @@ const Categories: React.FC<CategoriesProps> = ({
                 }}
                 className="text-neutral-600 font-semibold"
               >
-                {category.name}
+                {category.strCategory}
               </Text>
             </TouchableOpacity>
           );
